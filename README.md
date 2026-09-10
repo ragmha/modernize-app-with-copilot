@@ -178,3 +178,22 @@ npm run compile:review
 
 Your exercise issue is the main guide. You can also [browse all the lessons](.github/steps)
 at any time.
+
+## Project status and disclaimer
+
+This is an independent personal project maintained by `ragmha`. It is not
+affiliated with, endorsed by, or sponsored by any employer or organization.
+
+The material is intended for learning and demonstration and is provided "as is",
+without warranty. Review the code and configuration before use. You are responsible
+for obtaining the required permissions, securing your environment, and managing
+any cloud or AI usage charges.
+
+## License
+
+Original exercise content and tooling are licensed under the [MIT License](LICENSE).
+Copyright (c) 2026 ragmha.
+
+Third-party sample code, assets, and dependencies retain their own licenses and
+copyright notices. See the [third-party license notices](third_party/README.md)
+for details.
