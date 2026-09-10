@@ -3,33 +3,46 @@
 Assessment explains the starting point; a plan turns findings into small, reviewable
 changes with acceptance criteria. Do not confuse generating a plan with executing it.
 
-The provided MicroHack agents/templates use inconsistent historical targets.
-For this exercise, use **.NET 10** and **Java 25 / Spring Boot 4.0.x**.
+The targets are **.NET 10 / EF Core 10** for the ASP.NET Core track and
+**Java 25 / Spring Boot 4.0.x** for the Java track.
 
 ### Activity
 
 1. Create `lab/assessment` from the updated default branch.
-2. Use Copilot Chat and the read-only modernization coach to assess both applications.
+2. Use Copilot Chat and the read-only modernization coach for one track at a time. Start with that track's baseline findings, identify its cloud blockers, and then repeat for the other app.
 3. Optionally install the pinned Modernize CLI with `bash scripts/install-modernize.sh --accept-license` after reading its linked terms. This downloads the official distribution for your use; the repository does not redistribute it.
-4. With Modernize installed and GitHub authentication configured, run:
+4. With Modernize installed and GitHub authentication configured, assess each track separately:
 
    ```bash
-   modernize assess --source apps/dotnet --source apps/java --format markdown
+   modernize assess --source apps/dotnet --format markdown
    ```
 
-5. Read the report critically. Investigate database, file persistence, authentication, secrets, obsolete packages, deployment, and test coverage.
+   ```bash
+   modernize assess --source apps/java --format markdown
+   ```
+
+5. Read each report critically. Investigate that app's database, file persistence, authentication, secrets, obsolete packages, deployment, and test coverage. Compare the findings only after both separate assessments.
 6. Create `evidence/02-assessment.md` with headings `.NET assessment`, `Java assessment`, `Cloud blockers`.
 7. Create `evidence/02-plan.md` with headings `Changes`, `Acceptance criteria`, `Rollback`, `Human approval`. Name the human reviewer and record approval or requested revisions. Include actual upload/read/delete and persistence checks, not just an HTTP homepage check.
 8. Open, review, and merge the pull request after CI.
 
-Example planning commands, **not execution commands**:
+### ASP.NET Core planning
+
+Create a plan for the .NET track only. This is a planning command, **not execution**:
 
 ```bash
 modernize plan create "Upgrade PhotoAlbum to .NET 10, preserve behavior, and prepare Azure SQL and Blob Storage for Azure Container Apps. Do not provision yet." --source apps/dotnet --plan-name dotnet-modernization
+```
+
+### Java planning
+
+Create the Java plan in a separate request:
+
+```bash
 modernize plan create "Upgrade to Java 25 and Spring Boot 4.0, migrate Oracle queries and binary storage to PostgreSQL, preserve behavior, and prepare Azure Container Apps. Do not provision yet." --source apps/java --plan-name java-modernization
 ```
 
-Mixed-language assessment is supported. Upgrade the languages **separately**.
+Keep planning and upgrades scoped to one track per request.
 Modernize authentication and Azure OIDC are different; an ordinary repository
 `GITHUB_TOKEN` is not a universal Copilot credential.
 

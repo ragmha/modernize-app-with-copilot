@@ -14,14 +14,29 @@ does not translate Oracle SQL. This is the substantive cloud-migration step.
 7. Write `evidence/04-migration.md` with headings `.NET SQL and Blob`, `Java PostgreSQL`, `Persistence`, `Configuration`. Record test evidence and unresolved risks; no credentials.
 8. Run `npm run lab -- test both`, `npm run checkpoint -- 4`, and the local functional smoke runner where services are running. Review and merge after CI.
 
-Example prompt:
+### ASP.NET Core migration prompt
 
 ```text
-Implement only the approved cloud-readiness changes for this track. Preserve
-photo behavior and security. Read docs/azure-setup.md for configuration names.
-Use managed identity for Blob access. Translate database-specific behavior,
-add regression tests against the target database, and explain rollback.
-Never provision resources or embed credentials.
+Implement only the approved ASP.NET Core cloud-readiness changes in apps/dotnet.
+Do not inspect or change apps/java. Read docs/azure-setup.md for the .NET
+configuration contract. Preserve photo behavior and existing security, use the
+injected Azure SQL connection, and replace cloud photo-file storage with Blob
+Storage through managed identity. Add .NET regression tests for the changed
+behavior and explain migration and rollback. Do not change shared infrastructure
+or workflows without approval. Never provision resources or embed credentials.
+```
+
+### Java migration prompt
+
+```text
+Implement only the approved Java cloud-readiness changes in apps/java.
+Do not inspect or change apps/dotnet. Read docs/azure-setup.md for the Java
+configuration contract. Preserve photo behavior and existing security while
+migrating the Oracle driver, SQL, schema, and binary storage to PostgreSQL.
+Add versioned schema migrations and Java regression tests against PostgreSQL,
+and explain rollback. Do not add Azure Blob Storage to this track or change
+shared infrastructure or workflows without approval. Never provision resources
+or embed credentials.
 ```
 
 The structural grader is an early guard, not proof of durable storage.
