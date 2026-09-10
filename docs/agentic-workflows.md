@@ -33,6 +33,9 @@ tag. CI uses the official `linux-amd64` v0.86.2 binary with SHA-256
 `b8fd100d1d56a77b842ad28375ff361215a5aa1277db6b9a05d70054cde7260e`,
 then invokes it directly through `GH_AW_BINARY`. A preinstalled runner extension
 cannot silently substitute a newer compiler. No compiler binary is committed.
+The lock comparison preserves all executable YAML and the complete compiler/hash/
+dependency headers while ignoring non-executable comment formatting that differs
+between platforms. Permission, script, runtime, and source-hash differences still fail.
 
 ## Live inference is separate and optional
 

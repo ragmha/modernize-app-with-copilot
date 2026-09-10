@@ -41,7 +41,7 @@ jobs:
             "$GH_AW_BINARY" | sha256sum --check --status
           chmod u+x "$GH_AW_BINARY"
           npm run compile:review
-          git diff --exit-code -- .github/workflows/modernization-review.lock.yml
+          node scripts/check-review-lock.mjs
 
   dotnet:
     name: ASP.NET build and tests
