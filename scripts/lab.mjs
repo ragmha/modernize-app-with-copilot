@@ -100,7 +100,7 @@ async function main(command, track) {
   }
   if (command === "test") {
     if (track !== "java") run("dotnet", ["test", "PhotoAlbum.sln", "--configuration", "Release"], { cwd: join(root, "apps", "dotnet") });
-    if (track !== "dotnet") run("mvn", ["--batch-mode", "--no-transfer-progress", "verify"],
+    if (track !== "dotnet") run("mvn", ["--update-snapshots", "--batch-mode", "--no-transfer-progress", "verify"],
       { cwd: join(root, "apps", "java"), env: javaEnvironment(javaMajor(pom())) });
     return;
   }

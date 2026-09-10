@@ -41,3 +41,4 @@ jobs:
             docker info --format '{{.ServerVersion}}'
             gh aw --version
             npm run verify
+            npm run lab -- test both

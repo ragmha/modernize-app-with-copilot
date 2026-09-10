@@ -87,6 +87,11 @@ If post-create fails, inspect its log, address the failed download/policy/tool, 
 rerun `bash .devcontainer/post-create.sh`. Rebuild the devcontainer after changing
 features. A recovery-mode Codespace is not evidence that setup succeeded.
 
+If Maven Central reports a transient missing artifact, retry the lab test command.
+It requests fresh missing-release metadata (`--update-snapshots`) instead of
+reusing Maven's negative download cache. Do not change the baseline Spring Boot
+version or disable TLS just to work around an unavailable repository.
+
 For memory pressure, stop the unused database/app, or choose a larger Codespace.
 If an organization prevents Docker, Copilot, MCP, extensions, or image pulls, an
 administrator must resolve that policy; do not bypass it.

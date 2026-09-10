@@ -18,6 +18,7 @@ network:
     - github
 tools:
   bash: false
+  cli-proxy: false
   edit: false
   github:
     toolsets: [repos, issues, pull_requests]

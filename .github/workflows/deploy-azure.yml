@@ -71,7 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           dotnet test apps/dotnet/PhotoAlbum.sln --configuration Release
-          mvn --batch-mode --no-transfer-progress -f apps/java/pom.xml verify
+          mvn --update-snapshots --batch-mode --no-transfer-progress -f apps/java/pom.xml verify
       - name: Compile the original Bicep without authentication
         run: |
           set -euo pipefail
