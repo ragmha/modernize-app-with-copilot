@@ -1,0 +1,6 @@
+target
+.build-work
+.env
+.env.*
+!.env.example
+*.log

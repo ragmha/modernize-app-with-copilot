@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exercise:
+    name: Exercise tooling
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+      - run: npm ci --ignore-scripts --no-fund --no-audit
+      - run: npm run verify
+      - name: Check the committed agentic workflow against its pinned compiler
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh aw --version; then
+            gh extension install github/gh-aw --pin v0.86.2
+          fi
+          npm run compile:review
+          git diff --exit-code -- .github/workflows/modernization-review.lock.yml
+
+  dotnet:
+    name: ASP.NET build and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: |
+            9.0.x
+            10.0.x
+      - run: dotnet test apps/dotnet/PhotoAlbum.sln --configuration Release --logger trx --results-directory TestResults
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: dotnet-test-results
+          overwrite: true
+          path: TestResults
+          retention-days: 7
+
+  java:
+    name: Java build and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+      - id: runtime
+        name: Select the declared baseline or target JDK
+        run: echo "version=$(node scripts/lab.mjs java-version)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.runtime.outputs.version }}
+      - run: mvn --batch-mode --no-transfer-progress -f apps/java/pom.xml verify
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: java-test-results
+          overwrite: true
+          path: apps/java/target/surefire-reports
+          retention-days: 7
+
+  containers:
+    name: Container (${{ matrix.track }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        track: [dotnet, java]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build the actual application image without cloud credentials
+        env:
+          TRACK: ${{ matrix.track }}
+        run: docker build --tag "photoalbum-$TRACK:ci" "apps/$TRACK"
+
+  bicep:
+    name: Azure template compilation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Compile Bicep without logging in or provisioning
+        run: |
+          set -euo pipefail
+          test -f infra/main.bicep
+          if ! az bicep version; then az bicep install; fi
+          find infra -name '*.bicep' -print0 |
+            while IFS= read -r -d '' file; do
+              az bicep build --file "$file" --stdout > /dev/null
+            done
+
+  complete:
+    name: CI
+    if: always()
+    needs: [exercise, dotnet, java, containers, bicep]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Require every deterministic gate
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          node --input-type=module -e \
+            'const results = JSON.parse(process.env.RESULTS); if (!results.every(result => result === "success")) { console.error(results); process.exit(1); }'

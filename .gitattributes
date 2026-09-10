@@ -1,0 +1,13 @@
+* text=auto eol=lf
+apps/** -text
+third_party/licenses/** -text
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.jar binary
+
+.github/workflows/*.lock.yml linguist-generated=true

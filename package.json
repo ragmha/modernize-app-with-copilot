@@ -1,0 +1,21 @@
+{
+  "name": "modernize-app-with-copilot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A two-track GitHub Copilot modernization exercise.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check-repository.mjs",
+    "lab": "node scripts/lab.mjs",
+    "checkpoint": "node scripts/checkpoint.mjs",
+    "compile:review": "gh aw compile modernization-review --no-check-update --action-mode action --action-tag 6aab9e5b5c91c615506061f09bedd81a23babe3c",
+    "verify": "npm test && npm run check"
+  },
+  "devDependencies": {
+    "yaml": "2.9.0"
+  }
+}

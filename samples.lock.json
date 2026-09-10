@@ -1,0 +1,780 @@
+{
+  "schemaVersion": 1,
+  "description": "Pinned, allowlisted Microsoft sample snapshots; not a dependency lock or a statement that these legacy versions are production-safe.",
+  "adaptationFile": "third_party/baseline-adaptations.json",
+  "dependencyLicenseNotices": [
+    {
+      "package": "SixLabors.ImageSharp",
+      "version": "3.1.11",
+      "sourceUrl": "https://github.com/SixLabors/ImageSharp/blob/v3.1.11/LICENSE",
+      "noticePath": "third_party/licenses/ImageSharp-3.1.11-LICENSE.txt",
+      "noticeSha256": "fdb7f24db8a6838eba1477242d2457bf6db2f3682b7cb3a16824e9f2f07936c2",
+      "exerciseLicense": "Apache-2.0 under the upstream open-source/source-available software eligibility condition; other uses must evaluate their own eligibility."
+    }
+  ],
+  "excluded": [
+    "Upstream root README and setup documentation",
+    "All .github workflows, instructions, agents, and issue templates",
+    "All .squad, .claude, .specify, and other AI agent automation",
+    "Oracle init scripts targeting XE instead of FREEPDB1",
+    "Upstream deployment, compose, infrastructure, and developer tooling",
+    "Microsoft proprietary modernization CLI binaries or source",
+    "Any file not in an explicit include allowlist"
+  ],
+  "samples": {
+    "dotnet": {
+      "repository": "https://github.com/Azure-Samples/PhotoAlbum",
+      "commit": "2fd6aff064d101cee630a25bbc0e42d14ce8599a",
+      "archiveUrl": "https://codeload.github.com/Azure-Samples/PhotoAlbum/tar.gz/2fd6aff064d101cee630a25bbc0e42d14ce8599a",
+      "archiveSha256": "8b51b9ded5a1ed152a99d37d01f6e5ec317639b6548833d68deb1a2849cbce6f",
+      "archiveRoot": "PhotoAlbum-2fd6aff064d101cee630a25bbc0e42d14ce8599a",
+      "destination": "apps/dotnet",
+      "include": [
+        "PhotoAlbum/",
+        "PhotoAlbum.Tests/",
+        "PhotoAlbum.sln",
+        "Dockerfile",
+        "LICENSE"
+      ],
+      "license": "MIT",
+      "licensePath": "apps/dotnet/LICENSE",
+      "baseline": "ASP.NET Core Razor Pages on net9.0 / EF Core 9.0.9; SQL Server metadata and local filesystem images",
+      "learnerTarget": "net10.0 / EF Core 10; Azure SQL and Azure Blob Storage with managed identity",
+      "adaptations": [
+        {
+          "id": "dotnet-database-health",
+          "path": "PhotoAlbum/Program.cs",
+          "reason": "Anonymous, uncached /health checks real database connectivity and returns 200 or 503; internal HTTP health probes bypass HTTPS redirection."
+        },
+        {
+          "id": "dotnet-container-port",
+          "path": "Dockerfile",
+          "reason": "Explicitly set the existing HTTP container port to 8080; preserve net9.0 build/runtime images."
+        },
+        {
+          "id": "dotnet-container-context",
+          "path": ".dockerignore",
+          "reason": "Exclude local credentials, uploads, IDE state, and build outputs from container build contexts."
+        }
+      ],
+      "files": [
+        {
+          "path": ".dockerignore",
+          "upstreamSha256": null,
+          "vendoredSha256": "b64233d525b938f035310fed044099bfabf28f6c57b9638c8394ca3a449ec348"
+        },
+        {
+          "path": "Dockerfile",
+          "upstreamSha256": "cd8c7932b3cd95841482ebc99dc13b9b391f2d7ed266fee7ac4e7d55dda79eab",
+          "vendoredSha256": "1a6601821eb3e4c229f6272ff1ad8a6a82facf38d96a22c1eb870fe2c1a8ae7d"
+        },
+        {
+          "path": "LICENSE",
+          "upstreamSha256": "646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2",
+          "vendoredSha256": "646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2"
+        },
+        {
+          "path": "PhotoAlbum.Tests/PhotoAlbum.Tests.csproj",
+          "upstreamSha256": "062e1592b57d39c7268a9bb342e81056f5bb54813a256342f718ae681108646b",
+          "vendoredSha256": "062e1592b57d39c7268a9bb342e81056f5bb54813a256342f718ae681108646b"
+        },
+        {
+          "path": "PhotoAlbum.Tests/Unit/Services/PhotoServiceTests.cs",
+          "upstreamSha256": "35ee59a74a9a6cecdcd512cc38231d3a735cddd191707240c81756b53ba8c10c",
+          "vendoredSha256": "35ee59a74a9a6cecdcd512cc38231d3a735cddd191707240c81756b53ba8c10c"
+        },
+        {
+          "path": "PhotoAlbum.sln",
+          "upstreamSha256": "8607fb2d9cf559f561df40854a44290432bea77d0efd93036277bf3f7e04a6fc",
+          "vendoredSha256": "8607fb2d9cf559f561df40854a44290432bea77d0efd93036277bf3f7e04a6fc"
+        },
+        {
+          "path": "PhotoAlbum/Data/PhotoAlbumContext.cs",
+          "upstreamSha256": "fba95bdf225b38aa9863800ba92de3d4ad8b88db297fdfa206d0284d72df1ec7",
+          "vendoredSha256": "fba95bdf225b38aa9863800ba92de3d4ad8b88db297fdfa206d0284d72df1ec7"
+        },
+        {
+          "path": "PhotoAlbum/Migrations/20250930101715_InitialCreate.Designer.cs",
+          "upstreamSha256": "b3b3b072f4351b72c227efed7952e60ab14b11e067aa2d4f1de4f25011a83ac6",
+          "vendoredSha256": "b3b3b072f4351b72c227efed7952e60ab14b11e067aa2d4f1de4f25011a83ac6"
+        },
+        {
+          "path": "PhotoAlbum/Migrations/20250930101715_InitialCreate.cs",
+          "upstreamSha256": "9ec4b3ca76b5c43cb4bcb010b2f06b9144b0a6d2adfb97b3bebd407d3b3e0182",
+          "vendoredSha256": "9ec4b3ca76b5c43cb4bcb010b2f06b9144b0a6d2adfb97b3bebd407d3b3e0182"
+        },
+        {
+          "path": "PhotoAlbum/Migrations/PhotoAlbumContextModelSnapshot.cs",
+          "upstreamSha256": "9d62fbd5ec27d6ede16f3a040b779dd615c7297698333fa329f553652da2cbd9",
+          "vendoredSha256": "9d62fbd5ec27d6ede16f3a040b779dd615c7297698333fa329f553652da2cbd9"
+        },
+        {
+          "path": "PhotoAlbum/Models/Photo.cs",
+          "upstreamSha256": "f074aeffa254c1045e0bf7b108a22afe3dc4fb9be0742a36df7225936545b8d4",
+          "vendoredSha256": "f074aeffa254c1045e0bf7b108a22afe3dc4fb9be0742a36df7225936545b8d4"
+        },
+        {
+          "path": "PhotoAlbum/Models/UploadResult.cs",
+          "upstreamSha256": "de210b46b08f5d2d5e8666de4b5b1c373cc6561b0cce48f87f4e65aed686cf86",
+          "vendoredSha256": "de210b46b08f5d2d5e8666de4b5b1c373cc6561b0cce48f87f4e65aed686cf86"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Detail.cshtml",
+          "upstreamSha256": "3fd276b6a4599ac8e96d9810e1631e14d133170f20d945f20dee3ca11bed271b",
+          "vendoredSha256": "3fd276b6a4599ac8e96d9810e1631e14d133170f20d945f20dee3ca11bed271b"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Detail.cshtml.cs",
+          "upstreamSha256": "8bf45f4b3716c56008f27f97922af2d13fd2b3e4f8b9ba8ae7503be35c6d4592",
+          "vendoredSha256": "8bf45f4b3716c56008f27f97922af2d13fd2b3e4f8b9ba8ae7503be35c6d4592"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Error.cshtml",
+          "upstreamSha256": "6d42ce8f51555c7c4a67ae83c909f1b4ad0d440781d3f4e814735afed9311581",
+          "vendoredSha256": "6d42ce8f51555c7c4a67ae83c909f1b4ad0d440781d3f4e814735afed9311581"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Error.cshtml.cs",
+          "upstreamSha256": "3f22f2492ca2ee1531aed6c5f5d476e489ee86a11034dfbf9f03e94364629b05",
+          "vendoredSha256": "3f22f2492ca2ee1531aed6c5f5d476e489ee86a11034dfbf9f03e94364629b05"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Index.cshtml",
+          "upstreamSha256": "aab79b35cfa1434f70af9e6ebac10086f8c304922527308bba4d329a41bfe98d",
+          "vendoredSha256": "aab79b35cfa1434f70af9e6ebac10086f8c304922527308bba4d329a41bfe98d"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Index.cshtml.cs",
+          "upstreamSha256": "fbca6e527146c05ce5afc25ae99442e887ecda941d9f3ae189194ec777c32c7f",
+          "vendoredSha256": "fbca6e527146c05ce5afc25ae99442e887ecda941d9f3ae189194ec777c32c7f"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Login.cshtml",
+          "upstreamSha256": "ee4a0b55821f7bb6feb0af17a880a68d1f3ae76505a77695072dab3b6131eb8e",
+          "vendoredSha256": "ee4a0b55821f7bb6feb0af17a880a68d1f3ae76505a77695072dab3b6131eb8e"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Login.cshtml.cs",
+          "upstreamSha256": "9355620102b9ccb8347b96175ac4f760ee68080b2830c38e037ffb2eac8985ae",
+          "vendoredSha256": "9355620102b9ccb8347b96175ac4f760ee68080b2830c38e037ffb2eac8985ae"
+        },
+        {
+          "path": "PhotoAlbum/Pages/PhotoFile.cshtml",
+          "upstreamSha256": "86952ba47860f6cda5c54941ccba6e02ecb2d5ccb076bc1ffa7aad48da35a3d8",
+          "vendoredSha256": "86952ba47860f6cda5c54941ccba6e02ecb2d5ccb076bc1ffa7aad48da35a3d8"
+        },
+        {
+          "path": "PhotoAlbum/Pages/PhotoFile.cshtml.cs",
+          "upstreamSha256": "8b2cb9bf7ac266d19caac9e725160249553b7bc671bba5f82ca8ecdef03f679d",
+          "vendoredSha256": "8b2cb9bf7ac266d19caac9e725160249553b7bc671bba5f82ca8ecdef03f679d"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Privacy.cshtml",
+          "upstreamSha256": "c1e9d8d43865d3b68cedbf714fda9c0ff9393a18c7de943c3cd065343e1b4511",
+          "vendoredSha256": "c1e9d8d43865d3b68cedbf714fda9c0ff9393a18c7de943c3cd065343e1b4511"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Privacy.cshtml.cs",
+          "upstreamSha256": "a4e029363a0fb742785f7763ebd6f15068beedd34051b3619e6851372c990e12",
+          "vendoredSha256": "a4e029363a0fb742785f7763ebd6f15068beedd34051b3619e6851372c990e12"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Shared/_Layout.cshtml",
+          "upstreamSha256": "aecc00101153dc620546d487717106cc59dd48fc204e2d50e4739c6a16dd5930",
+          "vendoredSha256": "aecc00101153dc620546d487717106cc59dd48fc204e2d50e4739c6a16dd5930"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Shared/_Layout.cshtml.css",
+          "upstreamSha256": "1fe98c23430e23af20e98ab9e62fe39c7b6eaef1e3d9d4b59f3e85b31843077c",
+          "vendoredSha256": "1fe98c23430e23af20e98ab9e62fe39c7b6eaef1e3d9d4b59f3e85b31843077c"
+        },
+        {
+          "path": "PhotoAlbum/Pages/Shared/_ValidationScriptsPartial.cshtml",
+          "upstreamSha256": "48fed6ed616ba43ee237ff7c36ff2cd11b68db5cd00fa08c177e27aef2fe599e",
+          "vendoredSha256": "48fed6ed616ba43ee237ff7c36ff2cd11b68db5cd00fa08c177e27aef2fe599e"
+        },
+        {
+          "path": "PhotoAlbum/Pages/_ViewImports.cshtml",
+          "upstreamSha256": "5b98eb1668ffb5934afdb63d202e6da99b90b68f66f2e5f710ae925b0d64f1f6",
+          "vendoredSha256": "5b98eb1668ffb5934afdb63d202e6da99b90b68f66f2e5f710ae925b0d64f1f6"
+        },
+        {
+          "path": "PhotoAlbum/Pages/_ViewStart.cshtml",
+          "upstreamSha256": "f6dceb9e6258ad80525250b5faf8454ab7688b0f5d58a253529149f42d4ec50c",
+          "vendoredSha256": "f6dceb9e6258ad80525250b5faf8454ab7688b0f5d58a253529149f42d4ec50c"
+        },
+        {
+          "path": "PhotoAlbum/PhotoAlbum.csproj",
+          "upstreamSha256": "2da2d1a04601ae3e8a987b7a69ad8a133dcc15f4ddaf475ccfe6310cf927b458",
+          "vendoredSha256": "2da2d1a04601ae3e8a987b7a69ad8a133dcc15f4ddaf475ccfe6310cf927b458"
+        },
+        {
+          "path": "PhotoAlbum/Program.cs",
+          "upstreamSha256": "4daedc2c1268fa980a03bee46f457339df6d8351a183292372c4f41a4f509f6e",
+          "vendoredSha256": "a9083cfc8ff64ae6559ae5b0e61bf0e357c5924c2822ebc50a40c42c644c96a2"
+        },
+        {
+          "path": "PhotoAlbum/Properties/launchSettings.json",
+          "upstreamSha256": "b649b57dc39873b7116bcc1b9d4864eb6bd86be7819a3b07c5628fd5be1cc53f",
+          "vendoredSha256": "b649b57dc39873b7116bcc1b9d4864eb6bd86be7819a3b07c5628fd5be1cc53f"
+        },
+        {
+          "path": "PhotoAlbum/Services/IPhotoService.cs",
+          "upstreamSha256": "4e5d14bab93eea60f84764f80b1a3a2a4cc36dfb16e8437e934981857e595f64",
+          "vendoredSha256": "4e5d14bab93eea60f84764f80b1a3a2a4cc36dfb16e8437e934981857e595f64"
+        },
+        {
+          "path": "PhotoAlbum/Services/PhotoService.cs",
+          "upstreamSha256": "5fe0bfbd781ab4f551889a09ba9fb86e424cbf4de409f351abc1631b70701439",
+          "vendoredSha256": "5fe0bfbd781ab4f551889a09ba9fb86e424cbf4de409f351abc1631b70701439"
+        },
+        {
+          "path": "PhotoAlbum/Web.config",
+          "upstreamSha256": "abfc849c1f5c65c7413ef16acc362cc07297a5578c0ce00b65f77d906808366a",
+          "vendoredSha256": "abfc849c1f5c65c7413ef16acc362cc07297a5578c0ce00b65f77d906808366a"
+        },
+        {
+          "path": "PhotoAlbum/appsettings.Development.json",
+          "upstreamSha256": "a7b2550d6b07e351b291a61f2b235d04efd01eea1e63f20b11497e5b04815b12",
+          "vendoredSha256": "a7b2550d6b07e351b291a61f2b235d04efd01eea1e63f20b11497e5b04815b12"
+        },
+        {
+          "path": "PhotoAlbum/appsettings.json",
+          "upstreamSha256": "0da83c4c4d94631c6d390bc030284f7a69ddb53e68f691e757ac7e1d76d4c96e",
+          "vendoredSha256": "0da83c4c4d94631c6d390bc030284f7a69ddb53e68f691e757ac7e1d76d4c96e"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/css/site.css",
+          "upstreamSha256": "dea8101b38839a79a4fa44b2701a8293921ffc910b8678f8b5de11a8dbd1f575",
+          "vendoredSha256": "dea8101b38839a79a4fa44b2701a8293921ffc910b8678f8b5de11a8dbd1f575"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/favicon.ico",
+          "upstreamSha256": "26dc5ff4bfb9213291735808465e156d4a4691135f3815e3613761243e1f69c3",
+          "vendoredSha256": "26dc5ff4bfb9213291735808465e156d4a4691135f3815e3613761243e1f69c3"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/js/site.js",
+          "upstreamSha256": "cbf36077c5b6d54a6e094844a866d428312a16735f4e301f6f6e068492465323",
+          "vendoredSha256": "cbf36077c5b6d54a6e094844a866d428312a16735f4e301f6f6e068492465323"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/js/upload.js",
+          "upstreamSha256": "1aba1d11da990e83e4e6387c4bc99f1a41ffab23a3f2ec54ea8da127c23b3281",
+          "vendoredSha256": "1aba1d11da990e83e4e6387c4bc99f1a41ffab23a3f2ec54ea8da127c23b3281"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/LICENSE",
+          "upstreamSha256": "5b30317c9c35bb6f05101c501de866cc6852ab9b655dcf5941733f6644c3ebd0",
+          "vendoredSha256": "5b30317c9c35bb6f05101c501de866cc6852ab9b655dcf5941733f6644c3ebd0"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",
+          "upstreamSha256": "632e7f841a919a6536309d532b03f6697a133baf8e8f3acb98922c0b65b2e07f",
+          "vendoredSha256": "632e7f841a919a6536309d532b03f6697a133baf8e8f3acb98922c0b65b2e07f"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css.map",
+          "upstreamSha256": "c404fe9f6e4513986f3a38f67c6e1874ec2bd5b97822500904d83a3db84b4f61",
+          "vendoredSha256": "c404fe9f6e4513986f3a38f67c6e1874ec2bd5b97822500904d83a3db84b4f61"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.min.css",
+          "upstreamSha256": "e670c73068b27d91e5dd45de3ee84b0d047d9dc3df051d4725e64b5f224d576e",
+          "vendoredSha256": "e670c73068b27d91e5dd45de3ee84b0d047d9dc3df051d4725e64b5f224d576e"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.min.css.map",
+          "upstreamSha256": "9202fec7056633c20eb35e659e81edf5d691d8b44c8811bf7188143dc290398e",
+          "vendoredSha256": "9202fec7056633c20eb35e659e81edf5d691d8b44c8811bf7188143dc290398e"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css",
+          "upstreamSha256": "099c6817cce368b97256472f5420e573c09e411d70d5132bbe0631df472cf243",
+          "vendoredSha256": "099c6817cce368b97256472f5420e573c09e411d70d5132bbe0631df472cf243"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css.map",
+          "upstreamSha256": "fec890500f325fcdf48fe70be1a98a1d8df206d9f79fccf7120f95675e5ff749",
+          "vendoredSha256": "fec890500f325fcdf48fe70be1a98a1d8df206d9f79fccf7120f95675e5ff749"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css",
+          "upstreamSha256": "bccc5372f902e0bcbb2e2013dc6f32132f44a53afb1607b849ccd6a74effa779",
+          "vendoredSha256": "bccc5372f902e0bcbb2e2013dc6f32132f44a53afb1607b849ccd6a74effa779"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css.map",
+          "upstreamSha256": "ec674e970ed4ff083269e52d166c4fcf9fcca6176f5523ed54e3a54e7f5cdf74",
+          "vendoredSha256": "ec674e970ed4ff083269e52d166c4fcf9fcca6176f5523ed54e3a54e7f5cdf74"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css",
+          "upstreamSha256": "968f5823cd8e174defa2376ef97391dfe0d1acb229321a7364d9876cce420cc0",
+          "vendoredSha256": "968f5823cd8e174defa2376ef97391dfe0d1acb229321a7364d9876cce420cc0"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css.map",
+          "upstreamSha256": "45727f4198817c75e83ed5d1d84802f9b168da97b71ad6d93bbdb646d88b1b34",
+          "vendoredSha256": "45727f4198817c75e83ed5d1d84802f9b168da97b71ad6d93bbdb646d88b1b34"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css",
+          "upstreamSha256": "97cbede68a33bfde7c78c77d4c5b0f016825f4924af5829f6d54acf2672143ce",
+          "vendoredSha256": "97cbede68a33bfde7c78c77d4c5b0f016825f4924af5829f6d54acf2672143ce"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css.map",
+          "upstreamSha256": "d1ea954fada4a912c987da13a8b7881f852742c92a56389bf219767d7c65e258",
+          "vendoredSha256": "d1ea954fada4a912c987da13a8b7881f852742c92a56389bf219767d7c65e258"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css",
+          "upstreamSha256": "57ca6c9c7a094bf30f9425d6c1cfc9ded1ada7d7378061519aab08420a67f868",
+          "vendoredSha256": "57ca6c9c7a094bf30f9425d6c1cfc9ded1ada7d7378061519aab08420a67f868"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css.map",
+          "upstreamSha256": "3a8415c21ec0ae9edb5682b66624f1d92fff2ab9cfad23f33d9f770aa08c85ef",
+          "vendoredSha256": "3a8415c21ec0ae9edb5682b66624f1d92fff2ab9cfad23f33d9f770aa08c85ef"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css",
+          "upstreamSha256": "ffc8e1f217043052b24ba8285aa9cdbbbb7713364f0867506603bab02908f2d2",
+          "vendoredSha256": "ffc8e1f217043052b24ba8285aa9cdbbbb7713364f0867506603bab02908f2d2"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css.map",
+          "upstreamSha256": "f75d33c3eacc75c8342ece3c013a7ae6f127f2b7791ef3f138a9b6c77fc20482",
+          "vendoredSha256": "f75d33c3eacc75c8342ece3c013a7ae6f127f2b7791ef3f138a9b6c77fc20482"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css",
+          "upstreamSha256": "d81b9b80d50f950485ff4c0b15c45743f623ce4f6fb146c301e2b640cfa1fb2a",
+          "vendoredSha256": "d81b9b80d50f950485ff4c0b15c45743f623ce4f6fb146c301e2b640cfa1fb2a"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css.map",
+          "upstreamSha256": "35f8eb73852bf45bf6a0112cc10588c819cd0cff7dabe2e12fecfde79dced1c6",
+          "vendoredSha256": "35f8eb73852bf45bf6a0112cc10588c819cd0cff7dabe2e12fecfde79dced1c6"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css",
+          "upstreamSha256": "2b213dc5b28ef42b98c741d7a482a0b1622f5e401f213b62435ef68f6eb0991b",
+          "vendoredSha256": "2b213dc5b28ef42b98c741d7a482a0b1622f5e401f213b62435ef68f6eb0991b"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css.map",
+          "upstreamSha256": "ac70e68a9e09673b9a18e71243541242b21b1b411bdd98daf7086a485d736085",
+          "vendoredSha256": "ac70e68a9e09673b9a18e71243541242b21b1b411bdd98daf7086a485d736085"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css",
+          "upstreamSha256": "1fac2405b4b08ee6b6bde2684e1268e2ecb5eb58e9f833a2653968525719eaa4",
+          "vendoredSha256": "1fac2405b4b08ee6b6bde2684e1268e2ecb5eb58e9f833a2653968525719eaa4"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css.map",
+          "upstreamSha256": "a74055ab955efdda2104875f6eb66ca1036ed36252b0a875834c1bca242251a5",
+          "vendoredSha256": "a74055ab955efdda2104875f6eb66ca1036ed36252b0a875834c1bca242251a5"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css",
+          "upstreamSha256": "18052e9ba163c10f07ad719aa054671d3a9040ba658d719abd3ee6057f04f6a5",
+          "vendoredSha256": "18052e9ba163c10f07ad719aa054671d3a9040ba658d719abd3ee6057f04f6a5"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map",
+          "upstreamSha256": "a3c5cadf699c63f15f70e4350f61c9bd5b99d184d74944590cb5c22b47e741e0",
+          "vendoredSha256": "a3c5cadf699c63f15f70e4350f61c9bd5b99d184d74944590cb5c22b47e741e0"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+          "upstreamSha256": "18a105d7cb38e01e5ed0ca255c092992a2e211b39594a7fa57262bfc6fc4ea9c",
+          "vendoredSha256": "18a105d7cb38e01e5ed0ca255c092992a2e211b39594a7fa57262bfc6fc4ea9c"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.css.map",
+          "upstreamSha256": "2b3355477a7b51919b6bde1d9c2b6573a8d78cae6ead23e267f78d9ca4e60e4c",
+          "vendoredSha256": "2b3355477a7b51919b6bde1d9c2b6573a8d78cae6ead23e267f78d9ca4e60e4c"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+          "upstreamSha256": "3c8f27e6009ccfd710a905e6dcf12d0ee3c6f2ac7da05b0572d3e0d12e736fc8",
+          "vendoredSha256": "3c8f27e6009ccfd710a905e6dcf12d0ee3c6f2ac7da05b0572d3e0d12e736fc8"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map",
+          "upstreamSha256": "f12338536350a422c64d02d6e43ff1dea493c3156ad823fe19761cdd5d56c05b",
+          "vendoredSha256": "f12338536350a422c64d02d6e43ff1dea493c3156ad823fe19761cdd5d56c05b"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css",
+          "upstreamSha256": "8f91385c88f5a7590d9c38b4c75b5e5fd457a21d7f14d94fbc230bf589918764",
+          "vendoredSha256": "8f91385c88f5a7590d9c38b4c75b5e5fd457a21d7f14d94fbc230bf589918764"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css.map",
+          "upstreamSha256": "ddb61652289560c65fbf6c2ae499d722c1e540a8122acfd57118af823819d61a",
+          "vendoredSha256": "ddb61652289560c65fbf6c2ae499d722c1e540a8122acfd57118af823819d61a"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css",
+          "upstreamSha256": "879944ecd9bc4a4788a411c763137df6ca4fdd5b8614a97935982ca1c8a5ef39",
+          "vendoredSha256": "879944ecd9bc4a4788a411c763137df6ca4fdd5b8614a97935982ca1c8a5ef39"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css.map",
+          "upstreamSha256": "ad3cd79677a971bfef80502207e53b3834007ce9492df337818e8853b78800d9",
+          "vendoredSha256": "ad3cd79677a971bfef80502207e53b3834007ce9492df337818e8853b78800d9"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js",
+          "upstreamSha256": "9a4a11a15db88d5fab08f59c1c34796b03f1f15bb3cc928dd226e1c59f7f59a3",
+          "vendoredSha256": "9a4a11a15db88d5fab08f59c1c34796b03f1f15bb3cc928dd226e1c59f7f59a3"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js.map",
+          "upstreamSha256": "5aae1a596d6b41d27eea8020cb525073d2018c72fd4f730a7d74c136a3afd367",
+          "vendoredSha256": "5aae1a596d6b41d27eea8020cb525073d2018c72fd4f730a7d74c136a3afd367"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
+          "upstreamSha256": "0833b2e9c3a26c258476c46266e6877fc75218625162e0460be9a3a098a61c6c",
+          "vendoredSha256": "0833b2e9c3a26c258476c46266e6877fc75218625162e0460be9a3a098a61c6c"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js.map",
+          "upstreamSha256": "5e3e0763164143baaa1ca0706b6100ba0452f911d6ce9713b48e3dbe07b35125",
+          "vendoredSha256": "5e3e0763164143baaa1ca0706b6100ba0452f911d6ce9713b48e3dbe07b35125"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js",
+          "upstreamSha256": "7b189764d243c2e7177ee8dedc26d73dbb92ebe12bcb7cfdb0ffa9826be1f270",
+          "vendoredSha256": "7b189764d243c2e7177ee8dedc26d73dbb92ebe12bcb7cfdb0ffa9826be1f270"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js.map",
+          "upstreamSha256": "10f44b829a9691a84bc449fa0948dd33be91218230d71747c136de1ecb2e8ffe",
+          "vendoredSha256": "10f44b829a9691a84bc449fa0948dd33be91218230d71747c136de1ecb2e8ffe"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js",
+          "upstreamSha256": "4197454f564d765cb8ae681406d5e65c54bd054d454dafac3deea1efde2c1514",
+          "vendoredSha256": "4197454f564d765cb8ae681406d5e65c54bd054d454dafac3deea1efde2c1514"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js.map",
+          "upstreamSha256": "4ec6eff33e9594d815113f31bf3ff22e8fefe622474c08f62788648633f5ac73",
+          "vendoredSha256": "4ec6eff33e9594d815113f31bf3ff22e8fefe622474c08f62788648633f5ac73"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+          "upstreamSha256": "f945bcd36c2055f9e36926ddc321cb954ec056995bd164e83a5bcdd429f321a7",
+          "vendoredSha256": "f945bcd36c2055f9e36926ddc321cb954ec056995bd164e83a5bcdd429f321a7"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.js.map",
+          "upstreamSha256": "f56afb1f17bc802243a081e1e713f6f65757bc2de43761a489f423f5cf2f631e",
+          "vendoredSha256": "f56afb1f17bc802243a081e1e713f6f65757bc2de43761a489f423f5cf2f631e"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js",
+          "upstreamSha256": "de040986d9a3ed89d5d5f9ad6d5727015e9e238c2cd13af8f1b55909386d0864",
+          "vendoredSha256": "de040986d9a3ed89d5d5f9ad6d5727015e9e238c2cd13af8f1b55909386d0864"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js.map",
+          "upstreamSha256": "648d357bf9ece3bdc62af0021b831c82025dc6f15f148c38c6ca704221bc61ee",
+          "vendoredSha256": "648d357bf9ece3bdc62af0021b831c82025dc6f15f148c38c6ca704221bc61ee"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation-unobtrusive/LICENSE.txt",
+          "upstreamSha256": "cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310",
+          "vendoredSha256": "cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js",
+          "upstreamSha256": "c0941a2745f29c11367eae827b15d78712aeedfb2d56641ced5d8c1cd4e8f964",
+          "vendoredSha256": "c0941a2745f29c11367eae827b15d78712aeedfb2d56641ced5d8c1cd4e8f964"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js",
+          "upstreamSha256": "6096bb5bc12241d429924f778861238e72d25164694496d27f37d4461d64c73e",
+          "vendoredSha256": "6096bb5bc12241d429924f778861238e72d25164694496d27f37d4461d64c73e"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation/LICENSE.md",
+          "upstreamSha256": "f398878cab338b869638bdac1aeae76bf3ac11b2b89da6e0b68bc1a645733440",
+          "vendoredSha256": "f398878cab338b869638bdac1aeae76bf3ac11b2b89da6e0b68bc1a645733440"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation/dist/additional-methods.js",
+          "upstreamSha256": "46d2b9ff1697dc7d4640dc39817ee54c41ad0d772a943f23feb82cd1b10f03a7",
+          "vendoredSha256": "46d2b9ff1697dc7d4640dc39817ee54c41ad0d772a943f23feb82cd1b10f03a7"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation/dist/additional-methods.min.js",
+          "upstreamSha256": "32d100f35f5996ce9db4bb794b906910c3a189f3f2cfb81fcdf82d36d63be651",
+          "vendoredSha256": "32d100f35f5996ce9db4bb794b906910c3a189f3f2cfb81fcdf82d36d63be651"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+          "upstreamSha256": "9112fcdb7ef6babe58ad54e3156a7d9ae6a8f72794f00a0b889c526f97a49878",
+          "vendoredSha256": "9112fcdb7ef6babe58ad54e3156a7d9ae6a8f72794f00a0b889c526f97a49878"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
+          "upstreamSha256": "ba66d3685c4fdf516fe8ed62b692d2ff7fafe5f3805832ce533966bce19a295e",
+          "vendoredSha256": "ba66d3685c4fdf516fe8ed62b692d2ff7fafe5f3805832ce533966bce19a295e"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/LICENSE.txt",
+          "upstreamSha256": "911d138518f2d3bfa1ab8a74f277dd92337ea48f781a3dab2b99721346ee2135",
+          "vendoredSha256": "911d138518f2d3bfa1ab8a74f277dd92337ea48f781a3dab2b99721346ee2135"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/dist/jquery.js",
+          "upstreamSha256": "78a85aca2f0b110c29e0d2b137e09f0a1fb7a8e554b499f740d6744dc8962cfe",
+          "vendoredSha256": "78a85aca2f0b110c29e0d2b137e09f0a1fb7a8e554b499f740d6744dc8962cfe"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/dist/jquery.min.js",
+          "upstreamSha256": "fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a",
+          "vendoredSha256": "fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/dist/jquery.min.map",
+          "upstreamSha256": "cf74d51c62d299189989130ebb423b30453532fdc8988d8e2b71b1b9165a80b8",
+          "vendoredSha256": "cf74d51c62d299189989130ebb423b30453532fdc8988d8e2b71b1b9165a80b8"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/dist/jquery.slim.js",
+          "upstreamSha256": "520bef37cbc19203b496e3d2525dacf13225392611a061405f88e50889bd01d7",
+          "vendoredSha256": "520bef37cbc19203b496e3d2525dacf13225392611a061405f88e50889bd01d7"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/dist/jquery.slim.min.js",
+          "upstreamSha256": "9261efb3407e3a9096e4654750d8eff6b3a663422f48845c7fbcc65034c340cf",
+          "vendoredSha256": "9261efb3407e3a9096e4654750d8eff6b3a663422f48845c7fbcc65034c340cf"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/lib/jquery/dist/jquery.slim.min.map",
+          "upstreamSha256": "f45626720b71f2a668d4e3cf88fb7f049feccf4108f1244d518b052d90c412de",
+          "vendoredSha256": "f45626720b71f2a668d4e3cf88fb7f049feccf4108f1244d518b052d90c412de"
+        },
+        {
+          "path": "PhotoAlbum/wwwroot/uploads/.gitkeep",
+          "upstreamSha256": "d879c54e378d5ac9bd7c8267bfd2e442ba659e2cce7697fa12fe44a93abdfc5f",
+          "vendoredSha256": "d879c54e378d5ac9bd7c8267bfd2e442ba659e2cce7697fa12fe44a93abdfc5f"
+        }
+      ],
+      "importedFileCount": 101
+    },
+    "java": {
+      "repository": "https://github.com/Azure-Samples/PhotoAlbum-Java",
+      "commit": "0d5a4c47fa229c48bd99c625c69f80af5096a091",
+      "archiveUrl": "https://codeload.github.com/Azure-Samples/PhotoAlbum-Java/tar.gz/0d5a4c47fa229c48bd99c625c69f80af5096a091",
+      "archiveSha256": "31be44bba244790ee71cf8017d4a5093b0e793149e340ebf8d67ea7870cc24cc",
+      "archiveRoot": "PhotoAlbum-Java-0d5a4c47fa229c48bd99c625c69f80af5096a091",
+      "destination": "apps/java",
+      "include": [
+        "src/",
+        "pom.xml",
+        "Dockerfile",
+        "LICENSE",
+        ".env.example"
+      ],
+      "license": "MIT",
+      "licensePath": "apps/java/LICENSE",
+      "baseline": "Java 8 / Spring Boot 2.7.18; Oracle database, Oracle-native SQL, javax imports, and database BLOB photos",
+      "learnerTarget": "Java 25 / Spring Boot 4.0; PostgreSQL-compatible schema and queries, then deployment to Azure",
+      "adaptations": [
+        {
+          "id": "java-database-health",
+          "path": "src/main/java/com/photoalbum/controller/HealthController.java",
+          "reason": "Uncached /health uses JDBC connection validation and returns status only, without exception or credential details."
+        },
+        {
+          "id": "java-health-public",
+          "path": "src/main/java/com/photoalbum/config/SecurityConfig.java",
+          "reason": "Explicitly permit GET /health; retain the upstream stateless HTTP Basic authentication and existing CSRF behavior."
+        },
+        {
+          "id": "java-health-tests",
+          "path": "src/test/java/com/photoalbum/controller/HealthControllerTests.java",
+          "reason": "Test readiness success, invalid connections, resource closure, and safe failure responses using the existing test dependencies."
+        },
+        {
+          "id": "java-preserve-local-data",
+          "path": "src/main/resources/application.properties",
+          "reason": "Use Hibernate update rather than destructive create on baseline restart; production schema migration remains learner work."
+        },
+        {
+          "id": "java-preserve-container-data",
+          "path": "src/main/resources/application-docker.properties",
+          "reason": "Use Hibernate update rather than destructive create on baseline container restart."
+        },
+        {
+          "id": "java-container-tests",
+          "path": "Dockerfile",
+          "reason": "Run Maven verify with the upstream H2 test profile rather than skip tests; retain Java 8 images."
+        },
+        {
+          "id": "java-safe-env-example",
+          "path": ".env.example",
+          "reason": "Replace reusable password placeholders with blanks and distinguish Oracle-container variables from application datasource variables."
+        },
+        {
+          "id": "java-container-context",
+          "path": ".dockerignore",
+          "reason": "Exclude local credentials, logs, and build outputs from container build contexts."
+        }
+      ],
+      "files": [
+        {
+          "path": ".dockerignore",
+          "upstreamSha256": null,
+          "vendoredSha256": "16a4d9ae94698a3773965fe55976f825020fde06d2156005d6e18bc41bc5ba4b"
+        },
+        {
+          "path": ".env.example",
+          "upstreamSha256": "f447d49cae73b2b7ece2d8846bfd45b12de3d1d23cf57b8392ce9f2df33d7223",
+          "vendoredSha256": "dd1760feb8999f39c5fe83a6faec915374f65a1194c6a30409d2fdae788708e0"
+        },
+        {
+          "path": "Dockerfile",
+          "upstreamSha256": "ce2014b8de2c306c5ad91e79f278362dc558165019632d492e1ced7684147669",
+          "vendoredSha256": "1e60ba4067dce69e34b49b2a86e52a25ffbfb3cf8ecb55c551b7dcd6048aa19c"
+        },
+        {
+          "path": "LICENSE",
+          "upstreamSha256": "88b903d337d703830c8e136d61a144e273cc3ea2b37030aeb572471db46b7340",
+          "vendoredSha256": "88b903d337d703830c8e136d61a144e273cc3ea2b37030aeb572471db46b7340"
+        },
+        {
+          "path": "pom.xml",
+          "upstreamSha256": "1c0dfc3218457c0820596dd621ebbc025a7a96169d8b663abd194a62287ae22a",
+          "vendoredSha256": "1c0dfc3218457c0820596dd621ebbc025a7a96169d8b663abd194a62287ae22a"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/PhotoAlbumApplication.java",
+          "upstreamSha256": "793459734c87a229ddd83e8c0d4249ac667b247c3692c8a249a00ae30b4aa8a5",
+          "vendoredSha256": "793459734c87a229ddd83e8c0d4249ac667b247c3692c8a249a00ae30b4aa8a5"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/config/SecurityConfig.java",
+          "upstreamSha256": "ec8dbbd260d05df64d7e033511599e1a02b2100ae25fef27f3204bf7529cc650",
+          "vendoredSha256": "f2cc93f5bc92fde956ab20c75f48cc97254b3b6e6350dd8884209d27e45a9900"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/controller/DetailController.java",
+          "upstreamSha256": "ebe84b1bf8ad581c831d90e324a8b1c8258d48e7efa056e8f5abc75add2844f0",
+          "vendoredSha256": "ebe84b1bf8ad581c831d90e324a8b1c8258d48e7efa056e8f5abc75add2844f0"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/controller/HealthController.java",
+          "upstreamSha256": null,
+          "vendoredSha256": "65a28116b2bfa453ec08347ce34a0a8bdf4d54a4eba90f9bec285883c42a7a5f"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/controller/HomeController.java",
+          "upstreamSha256": "42616528f3a21d3c7e47f741cd271b666bd900cc407b180f46fd6a7a8da97af2",
+          "vendoredSha256": "42616528f3a21d3c7e47f741cd271b666bd900cc407b180f46fd6a7a8da97af2"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/controller/PhotoFileController.java",
+          "upstreamSha256": "ece34e387c6f6cb8eb03bebbb6bbdc50d1f8a17529e21d9a903b1637b6dbe3ae",
+          "vendoredSha256": "ece34e387c6f6cb8eb03bebbb6bbdc50d1f8a17529e21d9a903b1637b6dbe3ae"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/model/Photo.java",
+          "upstreamSha256": "3ee6f2c85b2b3c4727f18ebed25dd93c430735ae019ae3f8d6735945ab2cf4c9",
+          "vendoredSha256": "3ee6f2c85b2b3c4727f18ebed25dd93c430735ae019ae3f8d6735945ab2cf4c9"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/model/UploadResult.java",
+          "upstreamSha256": "dccc2820750d54f229dc8711bc1cfbe6f0df207b5d9929e9c25c7c1838266c77",
+          "vendoredSha256": "dccc2820750d54f229dc8711bc1cfbe6f0df207b5d9929e9c25c7c1838266c77"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/repository/PhotoRepository.java",
+          "upstreamSha256": "1ec6f7d9fdfbcee457d23efa74bedef3f59111d9a7eba0fc259d0d3d75312b00",
+          "vendoredSha256": "1ec6f7d9fdfbcee457d23efa74bedef3f59111d9a7eba0fc259d0d3d75312b00"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/service/PhotoService.java",
+          "upstreamSha256": "236efc7268882d16f50e8887c9a1a1883d40f2763e4f8f6669458d8bdeeb2809",
+          "vendoredSha256": "236efc7268882d16f50e8887c9a1a1883d40f2763e4f8f6669458d8bdeeb2809"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/service/impl/PhotoServiceImpl.java",
+          "upstreamSha256": "8c70098f5aaf08c36a01f5ec9a91ea9ce64c75887caa7ccab952fa4b2939d7be",
+          "vendoredSha256": "8c70098f5aaf08c36a01f5ec9a91ea9ce64c75887caa7ccab952fa4b2939d7be"
+        },
+        {
+          "path": "src/main/java/com/photoalbum/util/MathUtil.java",
+          "upstreamSha256": "a895c658eff5264ecb38560e589d06c52c4c0e5bd53c3083cad6a2a4fe6b6da0",
+          "vendoredSha256": "a895c658eff5264ecb38560e589d06c52c4c0e5bd53c3083cad6a2a4fe6b6da0"
+        },
+        {
+          "path": "src/main/resources/application-docker.properties",
+          "upstreamSha256": "0b6fd45530c378171964e226c20de12a6de13d56942191e540bdf3cb270db0f3",
+          "vendoredSha256": "ab47f15a6ec8b9ccb895dc918782ed232a621f3a2f2872710ec98180ebcaa466"
+        },
+        {
+          "path": "src/main/resources/application.properties",
+          "upstreamSha256": "1e0e0f98c3a1ced144730055b460ec0ed4f9d6b7280d162bf2cca9651d32e933",
+          "vendoredSha256": "293554491e6cf992bbd6f9b5f8ea1079efb98ffd15989c4dc8cf0ae282c379da"
+        },
+        {
+          "path": "src/main/resources/static/css/site.css",
+          "upstreamSha256": "655877b7e805d4e4b5c43a0f9cc5fb1fd74ad6fef9b20a05e884b84ab728cd5a",
+          "vendoredSha256": "655877b7e805d4e4b5c43a0f9cc5fb1fd74ad6fef9b20a05e884b84ab728cd5a"
+        },
+        {
+          "path": "src/main/resources/static/js/upload.js",
+          "upstreamSha256": "ab0cf896507c35a48b670cf30c2760a3d77e9dde6902d8a7e74c504ca3cf97c1",
+          "vendoredSha256": "ab0cf896507c35a48b670cf30c2760a3d77e9dde6902d8a7e74c504ca3cf97c1"
+        },
+        {
+          "path": "src/main/resources/static/uploads/5c62a4c2-d4eb-446f-9cd2-7ab8898cf371.jpg",
+          "upstreamSha256": "6f33db15fc94ff3edea6c22bfb44d1dee7ea8fcd7cd677327f6971a3bbc85435",
+          "vendoredSha256": "6f33db15fc94ff3edea6c22bfb44d1dee7ea8fcd7cd677327f6971a3bbc85435"
+        },
+        {
+          "path": "src/main/resources/templates/detail.html",
+          "upstreamSha256": "34ee2d1308abe011ebd772cd33094911d9a824619138424150ded3f9ccd4d8f3",
+          "vendoredSha256": "34ee2d1308abe011ebd772cd33094911d9a824619138424150ded3f9ccd4d8f3"
+        },
+        {
+          "path": "src/main/resources/templates/index.html",
+          "upstreamSha256": "da0b5b6d13bd356dd7e3e9d6471dc8cdf812cc9cd61be8a01a87c9632d8d4a54",
+          "vendoredSha256": "da0b5b6d13bd356dd7e3e9d6471dc8cdf812cc9cd61be8a01a87c9632d8d4a54"
+        },
+        {
+          "path": "src/main/resources/templates/layout.html",
+          "upstreamSha256": "44dd33f4f75498ad21c9b19ac6dd221eb4b9af98fce002a18df88649a893d0d9",
+          "vendoredSha256": "44dd33f4f75498ad21c9b19ac6dd221eb4b9af98fce002a18df88649a893d0d9"
+        },
+        {
+          "path": "src/test/java/com/photoalbum/PhotoAlbumApplicationTests.java",
+          "upstreamSha256": "1271bd829cae5636bc7e859ba7a4db81be203b3936a0f6548b9d65c953d055b6",
+          "vendoredSha256": "1271bd829cae5636bc7e859ba7a4db81be203b3936a0f6548b9d65c953d055b6"
+        },
+        {
+          "path": "src/test/java/com/photoalbum/controller/HealthControllerTests.java",
+          "upstreamSha256": null,
+          "vendoredSha256": "fda469132f39a5f6e1658d19b6f129d82a91cf497f14f94b062df2a6d8cc4a49"
+        },
+        {
+          "path": "src/test/resources/application-test.properties",
+          "upstreamSha256": "f339e6441692122035541e1a68e20848e214367a05ea42a0d44b554d598f74e9",
+          "vendoredSha256": "f339e6441692122035541e1a68e20848e214367a05ea42a0d44b554d598f74e9"
+        }
+      ],
+      "importedFileCount": 25
+    }
+  },
+  "adaptationSha256": "5f7045e21801e5ee08903da875c07af7d69e686bc1042679345337130cd5b495"
+}

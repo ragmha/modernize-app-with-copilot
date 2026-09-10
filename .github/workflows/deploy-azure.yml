@@ -1,0 +1,182 @@
+name: Deploy to Azure
+
+on:
+  workflow_dispatch:
+    inputs:
+      acknowledge_costs:
+        description: "I approve billable Azure resources in my dedicated lab resource group and will clean them up."
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: azure
+  cancel-in-progress: false
+
+env:
+  GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+  AZURE_COST_ACKNOWLEDGED: ${{ inputs.acknowledge_costs }}
+
+jobs:
+  preflight:
+    name: Validate and build both tracks without Azure access
+    if: github.event_name == 'workflow_dispatch' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && inputs.acknowledge_costs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+      - name: Require successful CI on this current default-branch SHA
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const { requireSuccessfulCi, requireProtectedEnvironment } = await import(`${process.env.GITHUB_WORKSPACE}/scripts/azure-lib.mjs`);
+            const branch = context.payload.repository.default_branch;
+            const environment = await github.rest.repos.getEnvironment({ ...context.repo, environment_name: "azure" });
+            const policies = await github.paginate(github.rest.repos.listDeploymentBranchPolicies, { ...context.repo, environment_name: "azure", per_page: 100 });
+            requireProtectedEnvironment(environment.data, policies, branch);
+            const current = await github.rest.repos.getBranch({ ...context.repo, branch });
+            if (current.data.commit.sha !== context.sha) throw new Error("Default branch moved. Dispatch again on its current SHA.");
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              ...context.repo, workflow_id: "ci.yml", head_sha: context.sha, event: "push", per_page: 100
+            });
+            const run = data.workflow_runs.find(run => run.name === "CI" && run.path === ".github/workflows/ci.yml" && run.head_branch === branch);
+            if (!run || run.status !== "completed" || run.conclusion !== "success") throw new Error("Wait for the latest CI to succeed on this default-branch SHA, then dispatch again.");
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, { ...context.repo, run_id: run.id, per_page: 100 });
+            requireSuccessfulCi(data.workflow_runs, jobs, { sourceSha: context.sha, defaultBranch: branch });
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Reject unsupported baselines and incomplete cloud migrations
+        run: node scripts/checkpoint.mjs deploy
+      - name: Validate the repository and Azure safety helpers
+        run: npm run verify
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: "25"
+      - name: Test both upgraded applications before provisioning
+        run: |
+          set -euo pipefail
+          dotnet test apps/dotnet/PhotoAlbum.sln --configuration Release
+          mvn --batch-mode --no-transfer-progress -f apps/java/pom.xml verify
+      - name: Compile the original Bicep without authentication
+        run: |
+          set -euo pipefail
+          if ! az bicep version; then az bicep install; fi
+          for file in infra/*.bicep; do
+            az bicep build --file "$file" --stdout > /dev/null
+          done
+      - name: Build and archive both real application images without credentials
+        run: |
+          set -euo pipefail
+          mkdir -p .lab/azure-images
+          for track in dotnet java; do
+            docker build --platform linux/amd64 \
+              --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+              --tag "modernize-$track:$GITHUB_SHA" "apps/$track"
+            docker save --output ".lab/azure-images/$track.tar" "modernize-$track:$GITHUB_SHA"
+          done
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: azure-prebuilt-images
+          overwrite: true
+          path: .lab/azure-images/*.tar
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+  azure:
+    name: Approve costs, deploy both tracks, and verify persistence
+    needs: preflight
+    if: github.event_name == 'workflow_dispatch' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && inputs.acknowledge_costs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    environment: azure
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      AZURE_PRINCIPAL_ID: ${{ vars.AZURE_PRINCIPAL_ID }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      AZURE_ALLOWED_CIDR: ${{ vars.AZURE_ALLOWED_CIDR }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+      - name: Recheck the approved commit has not become stale
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const { requireProtectedEnvironment } = await import(`${process.env.GITHUB_WORKSPACE}/scripts/azure-lib.mjs`);
+            const environment = await github.rest.repos.getEnvironment({ ...context.repo, environment_name: "azure" });
+            const policies = await github.paginate(github.rest.repos.listDeploymentBranchPolicies, { ...context.repo, environment_name: "azure", per_page: 100 });
+            requireProtectedEnvironment(environment.data, policies, context.payload.repository.default_branch);
+            const current = await github.rest.repos.getBranch({ ...context.repo, branch: context.payload.repository.default_branch });
+            if (current.data.commit.sha !== context.sha) throw new Error("Default branch moved while awaiting approval. Dispatch a new run.");
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: azure-prebuilt-images
+          path: .lab/azure-images
+      - name: Validate Azure variables and runtime secrets before login
+        env:
+          SQL_ADMIN_PASSWORD: ${{ secrets.SQL_ADMIN_PASSWORD }}
+          POSTGRES_ADMIN_PASSWORD: ${{ secrets.POSTGRES_ADMIN_PASSWORD }}
+          DOTNET_ADMIN_PASSWORD: ${{ secrets.DOTNET_ADMIN_PASSWORD }}
+          JAVA_ADMIN_PASSWORD: ${{ secrets.JAVA_ADMIN_PASSWORD }}
+        run: node scripts/azure-deploy.mjs validate
+      - name: Prepare Azure CLI tooling without creating resources
+        run: |
+          set -euo pipefail
+          if ! az bicep version; then az bicep install; fi
+          if ! az extension show --name containerapp --only-show-errors > /dev/null 2>&1; then
+            az extension add --name containerapp --only-show-errors
+          fi
+      - id: login
+        name: Sign in using the protected environment's federated identity
+        uses: azure/login@8c334a195cbb38e46038007b304988d888bf676a # GitHub Azure OIDC documentation pin
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Provision, push prebuilt images, deploy, and smoke both applications
+        env:
+          SQL_ADMIN_PASSWORD: ${{ secrets.SQL_ADMIN_PASSWORD }}
+          POSTGRES_ADMIN_PASSWORD: ${{ secrets.POSTGRES_ADMIN_PASSWORD }}
+          DOTNET_ADMIN_PASSWORD: ${{ secrets.DOTNET_ADMIN_PASSWORD }}
+          JAVA_ADMIN_PASSWORD: ${{ secrets.JAVA_ADMIN_PASSWORD }}
+        run: node scripts/azure-deploy.mjs deploy
+      - name: Always revoke this runner's temporary ingress rules
+        if: always() && steps.login.outcome == 'success'
+        run: node scripts/azure-deploy.mjs revoke-smoke-access
+      - name: Publish evidence only after both remote smokes and access cleanup succeeded
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: azure-deployment-evidence
+          overwrite: true
+          path: .lab/deployment.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14

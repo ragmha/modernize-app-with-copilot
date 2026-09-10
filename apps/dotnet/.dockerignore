@@ -1,0 +1,11 @@
+**/bin
+**/obj
+**/TestResults
+**/.build-work
+**/uploads/*
+!**/uploads/.gitkeep
+.env
+.env.*
+!.env.example
+**/*.user
+**/*.suo
