@@ -30,11 +30,16 @@ jobs:
       - name: Check the committed agentic workflow against its pinned compiler
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_AW_BINARY: ${{ runner.temp }}/gh-aw-v0.86.2
         run: |
-          if ! gh aw --version; then
-            gh extension install github/gh-aw --pin v0.86.2
-          fi
-          gh aw --version
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            https://github.com/github/gh-aw/releases/download/v0.86.2/linux-amd64 \
+            --output "$GH_AW_BINARY"
+          printf '%s  %s\n' \
+            b8fd100d1d56a77b842ad28375ff361215a5aa1277db6b9a05d70054cde7260e \
+            "$GH_AW_BINARY" | sha256sum --check --status
+          chmod u+x "$GH_AW_BINARY"
           npm run compile:review
           git diff --exit-code -- .github/workflows/modernization-review.lock.yml
 

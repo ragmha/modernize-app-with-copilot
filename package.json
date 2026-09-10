@@ -12,7 +12,7 @@
     "check": "node scripts/check-repository.mjs",
     "lab": "node scripts/lab.mjs",
     "checkpoint": "node scripts/checkpoint.mjs",
-    "compile:review": "gh aw compile modernization-review --no-check-update --action-mode action --action-tag 6aab9e5b5c91c615506061f09bedd81a23babe3c",
+    "compile:review": "node scripts/compile-review.mjs",
     "verify": "npm test && npm run check"
   },
   "devDependencies": {

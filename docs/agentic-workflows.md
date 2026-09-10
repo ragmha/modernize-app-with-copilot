@@ -28,6 +28,11 @@ it does not call a model or prove that the agent gave good recommendations.
 The npm command pins the `github/gh-aw-actions` runtime to the v0.86.2 release
 commit `6aab9e5b5c91c615506061f09bedd81a23babe3c`; plain `gh aw compile` can restore
 a floating runtime tag, which this repository's checks intentionally reject.
+It also verifies the compiler's actual version, not just the requested installation
+tag. CI uses the official `linux-amd64` v0.86.2 binary with SHA-256
+`b8fd100d1d56a77b842ad28375ff361215a5aa1277db6b9a05d70054cde7260e`,
+then invokes it directly through `GH_AW_BINARY`. A preinstalled runner extension
+cannot silently substitute a newer compiler. No compiler binary is committed.
 
 ## Live inference is separate and optional
 
